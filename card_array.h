@@ -5,10 +5,11 @@
 class CardNode        //卡牌链表
 {   
     public:
-        Card *card;
-        int index;                     //index   从1开始
+        Card *card; 
+
         CardNode *next;
         CardNode *pre;
+        
         CardNode(Card card);
         ~CardNode(); 
 };
@@ -18,13 +19,13 @@ class CardNode        //卡牌链表
  * The card list oprator class
  */
 class Cards 
-{
-     
-
+{ 
     private :
         CardNode* head;             //the head node 
-        CardNode* last;            //the tail node
-        int num;                   //链表项数目 
+        CardNode* tail;            //the tail node
+        int total_num;                   //链表项数目
+
+        CardNode* get_node(int index);
     public : 
         Cards();
         ~Cards(); 
@@ -32,10 +33,10 @@ class Cards
         bool add(Card card);
         bool remove(int index);
         bool order();                             //排序
-        bool clear_list();         //清空链表 
-        Card* get_from_index(int indexs);        //由Index得到卡片 
+        bool clear();         //清空链表 
 
-        int get_num();
+        int size();
+        Card* get_card(int index);        //由Index得到卡片 
 
 };
 #endif
