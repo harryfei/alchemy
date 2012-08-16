@@ -1,16 +1,15 @@
 #ifndef CARD_ARRAY_H_H_H_
 #define CARD_ARRAY_H_H_H_
 
-#include "Card.h"
+#include "card.h"
 class CardNode        //卡牌链表
 {   
     public:
         Card *card; 
 
         CardNode *next;
-        CardNode *pre;
-        
-        CardNode(Card card);
+        CardNode *pre; 
+        CardNode(Card *card);
         ~CardNode(); 
 };
 
@@ -30,7 +29,7 @@ class Cards
         Cards();
         ~Cards(); 
 
-        bool add(Card card);
+        bool add(Card *card);
         bool remove(int index);
         bool order();                             //排序
         bool clear();         //清空链表 

@@ -1,8 +1,12 @@
-#include "Card.h"
-
+#include "card_array.h"
+#include "card.h" 
+#include "stddef.h" 
+#include "stdio.h" 
 CardNode::CardNode(Card *card)
 { 
-    this.card = card; 
+    this->card = card; 
+    pre = NULL;
+    next = NULL;
 }
 CardNode::~CardNode()
 { 
@@ -14,9 +18,9 @@ CardNode::~CardNode()
 /*---------public mothed ---------------------*/
 Cards::Cards()
 {
-    head = NULL; 
-    last = head; 
-    num = 0; 
+    head = NULL;
+    tail = head; 
+    total_num = 0; 
 } 
 
 Cards::~Cards()
@@ -27,25 +31,41 @@ Cards::~Cards()
 
 bool Cards::clear()
 { 
-    while(head!=NULL)
-    {
+    int i = 0;
+    while(i<total_num)
+    { 
         CardNode* p;
         p = head;
         head = head->next;
         delete p;
+        i++;
+        
     } 
+    total_num = 0;
     head = NULL;
+    tail = NULL;
     return true;
+    
 } 
 
 //增加链表
 bool Cards::add(Card *card)         
 {
-    CardNode *new_node = new CardNord(card); 
-
-    tail->next = new_node;
-    new_node->pre = tail;
-    tail = new_node;
+    CardNode *new_node = new CardNode(card); 
+    
+    if(total_num == 0)
+    {
+        head = new_node;
+        head->pre = new_node; 
+        head->next = new_node;
+        tail = head;
+    }
+    else
+    {
+        tail->next = new_node;
+        new_node->pre = tail;
+        tail = new_node; 
+    }
 
     total_num++; 
     return true; 
@@ -58,14 +78,22 @@ bool Cards::remove(int index)
     p->pre->next = p->next;
     p->next->pre = p->pre; 
 
+    if(index == (total_num-1))
+    {
+        tail = p->pre; 
+    }
+    else if(index == 0)
+    {
+         head = p->next;
+    }
     delete p;
-    p = NULL; 
-    num--; 
+    p = NULL;
 
+    total_num--; 
     return true;
 
 }
-Card* Cards::get_from_index(int index)           //由ID号得到元素 待改 
+Card* Cards::get_card(int index)           //由ID号得到元素 待改 
 {     
     return get_node(index)->card;
 } 
@@ -87,7 +115,12 @@ CardNode* Cards::get_node(int index)           //由ID号得到元素 待改
         p = p->next;
     } 
     return p; 
-} 
+}
+
+bool Cards::order()
+{
+    return false; 
+}
 /*bool Cards::Order()                                //排序
 {
     CardNode *MHead;
