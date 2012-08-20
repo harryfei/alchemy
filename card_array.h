@@ -31,8 +31,10 @@ class Cards
 
         bool add(Card *card);
         bool remove(int index);
-        bool order();                             //排序
-        bool clear();         //清空链表 
+        bool order();
+        bool clear();
+        bool wash();
+
 
         int size();
         Card* get_card(int index);        //由Index得到卡片 

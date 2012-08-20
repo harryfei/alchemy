@@ -1,7 +1,9 @@
 #include "card_array.h"
 #include "card.h" 
 #include "stddef.h" 
+#include <time.h>
 #include "stdio.h" 
+#include "stdlib.h" 
 CardNode::CardNode(Card *card)
 { 
     this->card = card; 
@@ -46,7 +48,51 @@ bool Cards::clear()
     tail = NULL;
     return true;
     
-} 
+}
+
+bool Cards::wash()
+{
+    Card* card_bullet[total_num];
+    CardNode *here = head;
+    for(int i=0;i<total_num;i++)
+    {
+        card_bullet[i] = here->card;
+        here = here->next; 
+    }
+
+    int is_exist[total_num];
+    for(int i=0;i<total_num;i++)
+    {
+         is_exist[i]=0;
+    }
+
+   // Card* new_card_bullet[num];
+    here = head;
+    for(int i=0;i<total_num;i++)
+    {
+        srand((unsigned)time(NULL));
+
+        int m;
+        while(1)
+        { 
+            m = rand()%total_num; 
+            if(is_exist[m] == 1)
+            { 
+                continue;
+            }else
+            {
+                is_exist[m] = 1;
+                break; 
+            } 
+        }
+        
+      //  new_card_bullet[i] = card_bullet[m];
+        here->card = card_bullet[m]; 
+        here = head->next; 
+    } 
+    //for(int i=0)
+     
+}
 
 //增加链表
 bool Cards::add(Card *card)         
@@ -120,7 +166,8 @@ CardNode* Cards::get_node(int index)           //由ID号得到元素 待改
 bool Cards::order()
 {
     return false; 
-}
+} 
+
 /*bool Cards::Order()                                //排序
 {
     CardNode *MHead;
