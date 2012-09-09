@@ -3,41 +3,39 @@
 
 #include "card.h"
 class CardNode        //卡牌链表
-{   
+{
     public:
-        Card *card; 
+        Card *card;
 
         CardNode *next;
-        CardNode *pre; 
+        CardNode *pre;
         CardNode(Card *card);
-        ~CardNode(); 
+        ~CardNode();
 };
 
 
 /*
  * The card list oprator class
  */
-class Cards 
-{ 
+class Cards
+{
     private :
-        CardNode* head;             //the head node 
+        CardNode* head;             //the head node
         CardNode* tail;            //the tail node
         int total_num;                   //链表项数目
 
         CardNode* get_node(int index);
-    public : 
+    public :
         Cards();
-        ~Cards(); 
+        ~Cards();
 
         bool add(Card *card);
         bool remove(int index);
-        bool order();
+        bool insert(Card *card,int index);
         bool clear();
         bool wash();
-
-
         int size();
-        Card* get_card(int index);        //由Index得到卡片 
+        Card* get_card(int index);        //由Index得到卡片
 
 };
 #endif
