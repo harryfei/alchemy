@@ -104,7 +104,7 @@ public:
 	unsigned int line() const { return line_; }
 };
 
-/** 
+/**
  * A test that is implemented by a member function.
  */
 template<typename C>
@@ -364,7 +364,7 @@ inline std::ostream& operator<<(std::ostream& os, const unitpp::assertion_error&
  *
  * This allows a test to add its own flags to the resulting test program, in
  * the following way.
- * 
+ *
  * #bool x_flg = false;#
  * #unitpp::options().add("x", new options_utils::opt_flag(x_flg));#
  *

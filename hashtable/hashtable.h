@@ -7,6 +7,10 @@
 #ifndef _HASHTABLE_H
 #define _HASHTABLE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include<sys/types.h>
 #include<stdint.h>
 
@@ -31,7 +35,7 @@ struct hash_table_element
      */
     size_t value_len;
     /**
-     * pointer to the key 
+     * pointer to the key
      */
     void * key;
     /**
@@ -111,7 +115,7 @@ void hash_table_element_delete(hash_table_t *, hash_table_element_t *);
  * Function that returns a hash value for a given key and key_len
  * @param key pointer to the key
  * @param key_len length of the key
- * @param max_key max value of the hash to be returned by the function 
+ * @param max_key max value of the hash to be returned by the function
  * @returns hash value belonging to [0, max_key)
  */
 uint16_t hash_table_do_hash(void * key, size_t key_len, uint16_t max_key);
@@ -216,7 +220,7 @@ int hash_table_has_key(hash_table_t *, void *, size_t);
  * Function to return all the keys in a given hash table
  * @param table hash table from which key are to be reterived
  * @param keys a void** pointer where keys are filled in (memory allocated internally and must be freed)
- * @return total number of keys filled in keys 
+ * @return total number of keys filled in keys
  */
 size_t hash_table_get_keys(hash_table_t *, void **);
 
@@ -224,8 +228,8 @@ size_t hash_table_get_keys(hash_table_t *, void **);
  * Function to get all elements (key - value pairs) from the given hash table
  * @param table hash table from which elements have to be retrieved
  * @param elements a pointer to an array of hash_table_element_t pointer (malloced by function)
- * @returns 1 when no memory 
- * @returns count of elements 
+ * @returns 1 when no memory
+ * @returns count of elements
  */
 size_t hash_table_get_elements(hash_table_t *, hash_table_element_t *** );
 
@@ -248,4 +252,10 @@ int hash_table_resize(hash_table_t *, size_t);
  */
 int hash_table_iterate(hash_table_t *table, int (*fct)(void *user,
     void *value, void *key, size_t key_len), void *user);
+
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
