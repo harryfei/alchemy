@@ -11,11 +11,16 @@ namespace {
         public:
             TestExecutor()
             {
-                ACTION_BIND(1,&TestExecutor::hi);
+                ACTION_BIND(1,&TestExecutor::action1);
+                ACTION_BIND(2,&TestExecutor::action2);
             }
-            void hi()
+            void action1()
             {
-                printf("fsfsff\n");
+                printf("action 1\n");
+            }
+            void action2()
+            {
+                printf("action 2\n");
             }
 
     };
@@ -24,7 +29,14 @@ namespace {
         void testActionExecutor()
         {
             TestExecutor test;
-            test.exec_action(2);
+            Action a1 ,a2,a3;
+            a1.action_type =1;
+            a2.action_type =2;
+            a3.action_type =3;
+
+            test.exec_action(a1);
+            test.exec_action(a2);
+            test.exec_action(a3);
         }
         public:
         ActionTest() : suite("CardTest")

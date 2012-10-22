@@ -8,19 +8,19 @@ ActionExecutor::ActionExecutor() {
 ActionExecutor::~ActionExecutor() {
     hash_table_delete(action_functions);
 }
-void ActionExecutor::bind(int action_type,ActionCallBack function)
-{
-    HT_ADD(action_functions,&action_type,&function);
-}
 
-bool ActionExecutor::exec_action(int action) {
-    ActionCallBack function = getActionFunction(action);
+bool ActionExecutor::exec_action(Action action) {
+    ActionCallBack function = get_action_function(action.action_type);
     if(function != NULL)
     {
         function();
     }
 }
-ActionCallBack ActionExecutor::getActionFunction(int action_type)
+void ActionExecutor::bind(int action_type,ActionCallBack function)
+{
+    HT_ADD(action_functions,&action_type,&function);
+}
+ActionCallBack ActionExecutor::get_action_function(int action_type)
 {
     void * f = HT_LOOKUP(action_functions,&action_type);
     if(f != NULL)
