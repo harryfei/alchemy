@@ -14,11 +14,11 @@ CardNode::~CardNode()
 {
 }
 //-------------------------------Cards类
-
-
 /*---------public mothed ---------------------*/
 Cards::Cards()
 {
+
+
     head = NULL;
     tail = head;
     total_num = 0;
@@ -64,10 +64,10 @@ bool Cards::wash()
     }
 
     here = head;
+    srand((unsigned)time(NULL));
     for(int i=0;i<total_num;i++)
     {
         int m;
-        srand((unsigned)time(NULL));
         while(1)
         {
             m = rand()%total_num;

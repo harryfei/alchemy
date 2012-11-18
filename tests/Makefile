@@ -8,7 +8,7 @@ test: all
 all: libunit++.a card_test.cc card_test.cc action_test.cc
 	#g++ card_test.cc ../card.cc -o cardtest -Lunit++ -lunit++
 	#g++ cards_test.cc ../card.cc ../card_array.cc -o cardstest -Lunit++ -lunit++
-	g++ action_test.cc ../action.cc ../hashtable/hashtable.c -o actiontest -Lunit++ -lunit++
+	g++ action_test.cc ../action.cc ../hashtable/hashtable.c -o actiontest -Lunit++ -lunit++ -lpthread
 libunit++.a:
 	$(MAKE) libunit++.a -C unit++
 clean:
