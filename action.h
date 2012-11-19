@@ -12,8 +12,11 @@ class AsynRunner
     private:
         pthread_t pid;
         static void* start_thread(void *runner);
+        bool running;
+        void beside_run();
     protected:
         int start();
+        bool is_running();
         virtual void run();
 };
 
@@ -54,12 +57,33 @@ class ActionExecutor : public AsynRunner
         //ExecutorNode *next;
         //ExecutorNode();
 //};
+class ActionNode
+{
+    public:
+        Action action;
+        ActionNode *next;
+};
 
+class ActionQueue
+{
+    private:
+        ActionNode *head;
+        ActionNode *tail;
+        int count;
+    public:
+        ActionQueue();
+        Action pullAction();
+        void pushAction(Action action);
+        bool is_empty();
+
+};
 class ActionDispatcher : public AsynRunner
 {
     private :
         hash_table_t *action_executors;
         ActionExecutor *test_executor;
+        ActionQueue action_queue;
+        void run();
     public :
         static ActionDispatcher *get_instance();
         void add_executor(ActionExecutor *action_executor);

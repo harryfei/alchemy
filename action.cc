@@ -64,15 +64,38 @@ void ActionDispatcher::remove_executor(ActionExecutor *action_executor)
 }
 void ActionDispatcher::send_action(Action action)
 {
-    test_executor->exec_action(action);
+    printf("fjjfjfj1");
+    action_queue.pushAction(action);
+    if (!is_running())
+    {
+        printf("jflds");
+        start();
+    }
 }
-
+void ActionDispatcher::run()
+{
+    while(!action_queue.is_empty())
+    {
+        printf("%d\n",action_queue.is_empty());
+        Action action = action_queue.pullAction();
+        test_executor->exec_action(action);
+    }
+}
+void AsynRunner::beside_run()
+{
+    running = true;
+    run();
+    running = false;
+}
 void *AsynRunner::start_thread(void *runner)
 {
     AsynRunner *asynRunner = (AsynRunner *)runner;
-    asynRunner->run();
+    asynRunner->beside_run();
 }
-
+bool AsynRunner::is_running()
+{
+    return running;
+}
 int AsynRunner::start()
 {
     if(pthread_create(&pid,NULL,start_thread,this) != 0)
@@ -84,4 +107,53 @@ int AsynRunner::start()
 
 void AsynRunner::run()
 {
+}
+
+ActionQueue::ActionQueue()
+{
+    head = NULL;
+    tail = NULL;
+    count = 0;
+}
+
+Action ActionQueue::pullAction()
+{
+    Action action = head->action;
+    ActionNode *tmp = head;
+    head = head->next;
+    delete tmp;
+    count--;
+    return action;
+}
+void ActionQueue::pushAction(Action action)
+{
+    if (tail == NULL)
+    {
+        ActionNode * tmp = new ActionNode;
+        tmp->action = action;
+        tmp->next = NULL;
+        head = tmp;
+        tail = tmp;
+    }
+    else
+    {
+        ActionNode * tmp = new ActionNode;
+        tmp->action = action;
+        tmp->next = NULL;
+        tail->next = tmp;
+        tail = tmp;
+    }
+
+    count++;
+}
+bool ActionQueue::is_empty()
+{
+    if (count == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

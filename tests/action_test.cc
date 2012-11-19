@@ -24,7 +24,7 @@ namespace {
                 a2.action_type =2;
                 a3.action_type =3;
                 test = 1;
-                (AsynRunner *)this->start();
+                //(AsynRunner *)this->start();
                 send_action(a2);
             }
             void action2()
@@ -52,7 +52,6 @@ namespace {
 
     };
 
-
     class ActionTest : public suite
     {
         void testActionDispatcher()
@@ -67,7 +66,7 @@ namespace {
             printf("over\n");
             sleep(1);
 
-            assert_eq("content check1",2, test.test);
+            assert_eq("content check1",1, test.test);
 
         }
         void testActionExecutor()
