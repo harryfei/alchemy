@@ -64,11 +64,9 @@ void ActionDispatcher::remove_executor(ActionExecutor *action_executor)
 }
 void ActionDispatcher::send_action(Action action)
 {
-    printf("fjjfjfj1");
     action_queue.pushAction(action);
     if (!is_running())
     {
-        printf("jflds");
         start();
     }
 }
@@ -76,7 +74,7 @@ void ActionDispatcher::run()
 {
     while(!action_queue.is_empty())
     {
-        printf("%d\n",action_queue.is_empty());
+        //printf("%d\n",action_queue.is_empty());
         Action action = action_queue.pullAction();
         test_executor->exec_action(action);
     }
@@ -123,6 +121,7 @@ Action ActionQueue::pullAction()
     head = head->next;
     delete tmp;
     count--;
+    fix();
     return action;
 }
 void ActionQueue::pushAction(Action action)
@@ -145,6 +144,14 @@ void ActionQueue::pushAction(Action action)
     }
 
     count++;
+}
+
+void ActionQueue::fix(){
+    if (head==NULL || count == 0){
+        head = NULL;
+        tail = NULL;
+        count = 0;
+    }
 }
 bool ActionQueue::is_empty()
 {

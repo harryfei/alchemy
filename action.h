@@ -5,8 +5,6 @@
 #include <pthread.h>
 using namespace fastdelegate;
 
-
-
 class AsynRunner
 {
     private:
@@ -41,10 +39,6 @@ class ActionExecutor : public AsynRunner
     private:
         hash_table_t *action_functions;
         ActionCallBack get_action_function(int action_type);
-
-
-
-
 };
 //macro ACTION_BIND for using bind() and MakeDelegate() easy.
 #define ACTION_BIND(action_type,callback) \
@@ -70,6 +64,7 @@ class ActionQueue
         ActionNode *head;
         ActionNode *tail;
         int count;
+        void fix();
     public:
         ActionQueue();
         Action pullAction();
@@ -89,7 +84,6 @@ class ActionDispatcher : public AsynRunner
         void add_executor(ActionExecutor *action_executor);
         void remove_executor(ActionExecutor *action_executor);
         void send_action(Action action);
-
 };
 
 
