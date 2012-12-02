@@ -6,7 +6,6 @@
 #include "../delegate_tmpl.h"
 using namespace std;
 using namespace unitpp;
-typedef void (ActionExecutor::* TEST)(void);
 namespace {
     class TestExecutor : public ActionExecutor
     {
@@ -42,15 +41,31 @@ namespace {
                 test = 1;
                 printf("action3\n");
             }
-        //protected:
-            //void run()
-            //{
-                //int i = 0;
-                //for(i;i<50;i++)
-                //{
-                    //printf("%d\n",i);
-                //}
-            //}
+
+    };
+    class TestExecutor2 : public ActionExecutor
+    {
+        public:
+            int test;
+            TestExecutor2()
+            {
+                bind(member_func(this,&TestExecutor2::action1),1);
+                bind(member_func(this,&TestExecutor2::action2),2);
+            }
+            void action1()
+            {
+                Action a1,a2,a3;
+                a1.action_type =1;
+                test = 1;
+                printf("test2 action1\n");
+            }
+            void action2()
+            {
+                Action a1,a2,a3;
+                a1.action_type =1;
+                printf("test2 action2\n");
+                test = 2;
+            }
 
     };
 
@@ -64,9 +79,7 @@ namespace {
 
             ActionDispatcher *dispatcher = ActionDispatcher::get_instance();
             dispatcher->send_action(a1);
-
             sleep(1);
-
             assert_eq("content check1",2, test.test);
 
         }
@@ -93,11 +106,28 @@ namespace {
             sleep(1);
             assert_eq("content check5",2, test.test);
         }
+        void testMutiplyExecutor()
+        {
+            TestExecutor test;
+            TestExecutor2 test2;
+
+            Action a1,a2,a3,a4;
+            a1.action_type =1;
+            a2.action_type =2;
+            a3.action_type =3;
+            a4.action_type =4;
+
+            ActionDispatcher *dispatcher = ActionDispatcher::get_instance();
+            dispatcher->send_action(a1);
+            sleep(1);
+
+        }
         public:
         ActionTest() : suite("ActionTest")
         {
             add("ActionTest", testcase(this, "TestExecutor", &ActionTest::testActionExecutor));
             add("ActionTest", testcase(this, "TestDispacther", &ActionTest::testActionDispatcher));
+            add("ActionTest", testcase(this, "TestMutiplyDispacther", &ActionTest::testMutiplyExecutor));
             suite::main().add("ActionTest", this);
         }
     };

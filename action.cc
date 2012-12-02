@@ -49,10 +49,13 @@ void ActionExecutor::bind(ACTION_CB func,int action_type)
 ActionDispatcher::ActionDispatcher()
 {
     dispatch_thread = new Thread(member_func(this,&ActionDispatcher::dispatch_loop));
+    action_executors = hash_table_new(MODE_COPY);
+    executor_count = 0;
 }
 
 ActionDispatcher::~ActionDispatcher()
 {
+    hash_table_delete(action_executors);
     delete dispatch_thread;
 }
 ActionDispatcher *ActionDispatcher::get_instance()
@@ -63,18 +66,20 @@ ActionDispatcher *ActionDispatcher::get_instance()
 
 void ActionDispatcher::add_executor(ActionExecutor *action_executor)
 {
-    this->test_executor = action_executor;
-    //HT_ADD(action_executors,action_executor,action_executor);
+    int i = executor_count;
+    HT_ADD(action_executors,&i,action_executor);
+    executor_count++;
 }
 
 void ActionDispatcher::remove_executor(ActionExecutor *action_executor)
 {
     HT_REMOVE(action_executors,action_executor);
+    executor_count--;
 }
+
 void ActionDispatcher::send_action(Action action)
 {
-
-    action_queue.pushAction(action);
+    action_queue.push_action(action);
     if (!(dispatch_thread->is_running()))
     {
         dispatch_thread->start();
@@ -84,12 +89,15 @@ void ActionDispatcher::dispatch_loop()
 {
     while(!action_queue.is_empty())
     {
-        Action action = action_queue.pullAction();
-        test_executor->exec_action(action);
+        int i = 0;
+        Action action = action_queue.pull_action();
+        for(i;i<executor_count;i++)
+        {
+            ActionExecutor *executor = (ActionExecutor *)HT_LOOKUP(action_executors,&i);
+            executor->exec_action(action);
+        }
     }
 }
-
-
 
 
 
@@ -100,18 +108,18 @@ ActionQueue::ActionQueue()
     count = 0;
 }
 
-Action ActionQueue::pullAction()
+Action ActionQueue::pull_action()
 {
     Action action = head->action;
     ActionNode *tmp = head;
     head = head->next;
     delete tmp;
     count--;
-    fix();
+    fix_queue();
     return action;
 }
 
-void ActionQueue::pushAction(Action action)
+void ActionQueue::push_action(Action action)
 {
     if (tail == NULL)
     {
@@ -129,11 +137,11 @@ void ActionQueue::pushAction(Action action)
         tail->next = tmp;
         tail = tmp;
     }
-
     count++;
+    fix_queue();
 }
 
-void ActionQueue::fix(){
+void ActionQueue::fix_queue(){
     if (head==NULL || count == 0){
         head = NULL;
         tail = NULL;
