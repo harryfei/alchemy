@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
+#include "../delegate_tmpl.h"
 using namespace std;
 using namespace unitpp;
 typedef void (ActionExecutor::* TEST)(void);
@@ -13,9 +14,9 @@ namespace {
             int test;
             TestExecutor()
             {
-                ACTION_BIND(1,&TestExecutor::action1);
-                ACTION_BIND(2,&TestExecutor::action2);
-                ACTION_BIND(3,&TestExecutor::action3);
+                bind(member_func(this,&TestExecutor::action1),1);
+                bind(member_func(this,&TestExecutor::action2),2);
+                bind(member_func(this,&TestExecutor::action3),3);
             }
             void action1()
             {
@@ -41,15 +42,15 @@ namespace {
                 test = 1;
                 printf("action3\n");
             }
-        protected:
-            void run()
-            {
-                int i = 0;
-                for(i;i<50;i++)
-                {
-                    printf("%d\n",i);
-                }
-            }
+        //protected:
+            //void run()
+            //{
+                //int i = 0;
+                //for(i;i<50;i++)
+                //{
+                    //printf("%d\n",i);
+                //}
+            //}
 
     };
 

@@ -1,6 +1,9 @@
+#include <stdio.h>
+
 #include "action.h"
 #include "hashtable/hashtable.h"
-#include <stdio.h>
+#include "thread.h"
+#include "delegate_tmpl.h"
 
 ActionExecutor::ActionExecutor()
 {
@@ -18,25 +21,18 @@ ActionExecutor::~ActionExecutor()
 
 bool ActionExecutor::exec_action(Action action)
 {
-    ActionCallBack function = get_action_function(action.action_type);
-    if(function != NULL)
-    {
-        function();
-    }
-}
-void ActionExecutor::bind(int action_type,ActionCallBack function)
-{
-    HT_ADD(action_functions,&action_type,&function);
-}
-ActionCallBack ActionExecutor::get_action_function(int action_type)
-{
-    void * f = HT_LOOKUP(action_functions,&action_type);
+    int type = action.action_type;
+
+    void *f = HT_LOOKUP(action_functions,&type);
     if(f != NULL)
     {
-        ActionCallBack *function = (ActionCallBack *)f;
-        return *function;
-    }else{
-        return NULL;
+        ACTION_CB *function = (ACTION_CB *)f;
+        (*function)();
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -45,7 +41,20 @@ bool ActionExecutor::send_action(Action action)
     ActionDispatcher::get_instance()->send_action(action);
 }
 
+void ActionExecutor::bind(ACTION_CB func,int action_type)
+{
+    HT_ADD(action_functions,&action_type,&func);
+}
 
+ActionDispatcher::ActionDispatcher()
+{
+    dispatch_thread = new Thread(member_func(this,&ActionDispatcher::dispatch_loop));
+}
+
+ActionDispatcher::~ActionDispatcher()
+{
+    delete dispatch_thread;
+}
 ActionDispatcher *ActionDispatcher::get_instance()
 {
     static ActionDispatcher instance;
@@ -64,48 +73,25 @@ void ActionDispatcher::remove_executor(ActionExecutor *action_executor)
 }
 void ActionDispatcher::send_action(Action action)
 {
+
     action_queue.pushAction(action);
-    if (!is_running())
+    if (!(dispatch_thread->is_running()))
     {
-        start();
+        dispatch_thread->start();
     }
 }
-void ActionDispatcher::run()
+void ActionDispatcher::dispatch_loop()
 {
     while(!action_queue.is_empty())
     {
-        //printf("%d\n",action_queue.is_empty());
         Action action = action_queue.pullAction();
         test_executor->exec_action(action);
     }
 }
-void AsynRunner::beside_run()
-{
-    running = true;
-    run();
-    running = false;
-}
-void *AsynRunner::start_thread(void *runner)
-{
-    AsynRunner *asynRunner = (AsynRunner *)runner;
-    asynRunner->beside_run();
-}
-bool AsynRunner::is_running()
-{
-    return running;
-}
-int AsynRunner::start()
-{
-    if(pthread_create(&pid,NULL,start_thread,this) != 0)
-    {
-        return -1;
-    }
-    return 0;
-}
 
-void AsynRunner::run()
-{
-}
+
+
+
 
 ActionQueue::ActionQueue()
 {
@@ -124,6 +110,7 @@ Action ActionQueue::pullAction()
     fix();
     return action;
 }
+
 void ActionQueue::pushAction(Action action)
 {
     if (tail == NULL)
@@ -153,6 +140,7 @@ void ActionQueue::fix(){
         count = 0;
     }
 }
+
 bool ActionQueue::is_empty()
 {
     if (count == 0)
@@ -164,3 +152,4 @@ bool ActionQueue::is_empty()
         return false;
     }
 }
+
