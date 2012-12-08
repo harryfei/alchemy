@@ -20,7 +20,7 @@ class ActionExecutor
 
     protected:
         void bind(ACTION_CB func,int action_type);
-        bool send_action(Action action);
+        void send_action(Action action);
     private:
         hash_table_t *action_functions;
 };

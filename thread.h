@@ -9,7 +9,7 @@ class Thread
     private:
         pthread_t pid;
         THREAD_CB run;
-        static void* start_thread(void *runner);
+        static void *start_thread(void *runner);
         bool running;
     public:
         void beside_run();

@@ -36,7 +36,7 @@ bool ActionExecutor::exec_action(Action action)
     }
 }
 
-bool ActionExecutor::send_action(Action action)
+void ActionExecutor::send_action(Action action)
 {
     ActionDispatcher::get_instance()->send_action(action);
 }
