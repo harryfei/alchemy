@@ -25,7 +25,6 @@ namespace {
                 a3.action_type =3;
                 test = 1;
                 send_action(a2);
-                printf("action1\n");
             }
             void action2()
             {
@@ -33,13 +32,11 @@ namespace {
                 a1.action_type =1;
                 a2.action_type =2;
                 a3.action_type =3;
-                printf("action2\n");
                 test = 2;
             }
             void action3()
             {
                 test = 1;
-                printf("action3\n");
             }
 
     };
@@ -57,27 +54,29 @@ namespace {
                 Action a1,a2,a3;
                 a1.action_type =1;
                 test = 1;
-                printf("test2 action1\n");
             }
             void action2()
             {
                 Action a1,a2,a3;
                 a1.action_type =1;
-                printf("test2 action2\n");
                 test = 2;
             }
 
     };
 
+    ActionDispatcher *dispatcher = ActionDispatcher::get_instance();
+
     class ActionTest : public suite
     {
+
         void testActionDispatcher()
         {
-            TestExecutor test;
             Action a1;
-            a1.action_type =1;
 
-            ActionDispatcher *dispatcher = ActionDispatcher::get_instance();
+            a1.action_type = 1;
+
+            TestExecutor test;
+
             dispatcher->send_action(a1);
             sleep(1);
             assert_eq("content check1",2, test.test);
@@ -85,14 +84,14 @@ namespace {
         }
         void testActionExecutor()
         {
-            TestExecutor test;
             Action a1,a2,a3,a4;
-            a1.action_type =1;
+
+            a1.action_type = 1;
             a2.action_type =2;
             a3.action_type =3;
             a4.action_type =4;
+            TestExecutor test;
 
-            ActionDispatcher *dispatcher = ActionDispatcher::get_instance();
             dispatcher->send_action(a1);
             sleep(1);
             assert_eq("content check2",2, test.test);
@@ -108,28 +107,28 @@ namespace {
         }
         void testMutiplyExecutor()
         {
-            TestExecutor test;
+            Action a1;
+
+            a1.action_type = 1;
+
+            TestExecutor test1;
             TestExecutor2 test2;
 
-            Action a1,a2,a3,a4;
-            a1.action_type =1;
-            a2.action_type =2;
-            a3.action_type =3;
-            a4.action_type =4;
-
-            ActionDispatcher *dispatcher = ActionDispatcher::get_instance();
             dispatcher->send_action(a1);
             sleep(1);
+            assert_eq("content check6",2,test1.test);
+            assert_eq("content check7",2,test2.test);
 
         }
+
         public:
-        ActionTest() : suite("ActionTest")
-        {
-            add("ActionTest", testcase(this, "TestExecutor", &ActionTest::testActionExecutor));
-            add("ActionTest", testcase(this, "TestDispacther", &ActionTest::testActionDispatcher));
-            add("ActionTest", testcase(this, "TestMutiplyDispacther", &ActionTest::testMutiplyExecutor));
-            suite::main().add("ActionTest", this);
-        }
+            ActionTest() : suite("ActionTest")
+            {
+                add("ActionTest", testcase(this, "TestExecutor", &ActionTest::testActionExecutor));
+                add("ActionTest", testcase(this, "TestDispacther", &ActionTest::testActionDispatcher));
+                add("ActionTest", testcase(this, "TestMutiplyDispacther", &ActionTest::testMutiplyExecutor));
+                suite::main().add("ActionTest", this);
+            }
     };
 
     ActionTest *theTest = new ActionTest();
