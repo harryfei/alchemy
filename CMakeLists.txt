@@ -5,8 +5,9 @@ include_directories(
                     )
 
 enable_testing()
-add_subdirectory(tests)
 add_subdirectory(card)
 add_subdirectory(utils)
 add_subdirectory(framework)
+add_subdirectory(player)
+add_subdirectory(tests)
 
