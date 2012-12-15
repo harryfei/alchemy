@@ -1,6 +1,6 @@
 #include "unit++/unit++.h"
-#include "../card.h"
-#include "../card_array.h"
+#include "card/card.h"
+#include "card/card_array.h"
 using namespace std;
 using namespace unitpp;
 namespace {

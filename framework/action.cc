@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "action.h"
-#include "hashtable/hashtable.h"
-#include "thread.h"
-#include "delegate_tmpl.h"
+#include "framework/action.h"
+#include "framework/hashtable/hashtable.h"
+#include "utils/thread.h"
+#include "utils/delegate_tmpl.h"
 
 ActionExecutor::ActionExecutor()
 {

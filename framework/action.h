@@ -1,7 +1,7 @@
 #ifndef ACTION_H_H_H
 #define ACTION_H_H_H
 #include "hashtable/hashtable.h"
-#include "thread.h"
+#include "utils/thread.h"
 
 class Action
 {

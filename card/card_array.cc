@@ -1,5 +1,5 @@
-#include "card_array.h"
-#include "card.h"
+#include "card/card_array.h"
+#include "card/card.h"
 #include <stddef.h>
 #include <time.h>
 #include <stdio.h>

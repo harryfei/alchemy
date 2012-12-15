@@ -1,9 +1,9 @@
 #include "unit++/unit++.h"
-#include "../action.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
-#include "../delegate_tmpl.h"
+#include "utils/delegate_tmpl.h"
+#include "framework/action.h"
 using namespace std;
 using namespace unitpp;
 namespace {

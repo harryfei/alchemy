@@ -1,5 +1,5 @@
 #include "unit++/unit++.h"
-#include "../card.h"
+#include "card/card.h"
 #include <string>
 using namespace std;
 using namespace unitpp;
