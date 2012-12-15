@@ -49,6 +49,7 @@ void ActionExecutor::bind(ACTION_CB func,int action_type)
 ActionDispatcher::ActionDispatcher()
 {
     dispatch_thread = new Thread(member_func(this,&ActionDispatcher::dispatch_loop));
+    action_queue_mutex = new Mutex();
     action_executors = hash_table_new(MODE_COPY);
     executor_count = 0;
 }
@@ -57,6 +58,7 @@ ActionDispatcher::~ActionDispatcher()
 {
     hash_table_delete(action_executors);
     delete dispatch_thread;
+    delete action_queue_mutex;
 }
 ActionDispatcher *ActionDispatcher::get_instance()
 {
@@ -79,7 +81,10 @@ void ActionDispatcher::remove_executor(ActionExecutor *action_executor)
 
 void ActionDispatcher::send_action(Action action)
 {
+    action_queue_mutex->lock();
     action_queue.push_action(action);
+    action_queue_mutex->unlock();
+
     if (!(dispatch_thread->is_running()))
     {
         dispatch_thread->start();
@@ -89,8 +94,12 @@ void ActionDispatcher::dispatch_loop()
 {
     while(!action_queue.is_empty())
     {
-        int i = 0;
+
+        action_queue_mutex->lock();
         Action action = action_queue.pull_action();
+        action_queue_mutex->unlock();
+
+        int i = 0;
         for(i;i<executor_count;i++)
         {
             ActionExecutor *executor = (ActionExecutor *)HT_LOOKUP(action_executors,&i);

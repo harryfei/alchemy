@@ -16,6 +16,19 @@ class Thread
         Thread(THREAD_CB func);
         bool start();
         bool is_running();
+        bool join();
 };
 
+class Mutex
+{
+    public:
+        Mutex();
+        ~Mutex();
+        int lock();
+        int unlock();
+        int trylock();
+    private:
+        pthread_mutex_t mutex;
+
+};
 #endif

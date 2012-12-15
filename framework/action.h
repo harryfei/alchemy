@@ -55,6 +55,7 @@ class ActionDispatcher
         int executor_count;
         ActionQueue action_queue;
         Thread *dispatch_thread;
+        Mutex *action_queue_mutex;
         void dispatch_loop();
         ActionDispatcher();
         ~ActionDispatcher();

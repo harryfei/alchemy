@@ -1,5 +1,5 @@
 #include "thread.h"
-#include "stdio.h"
+#include <stdio.h>
 
 Thread::Thread(THREAD_CB func)
 {
@@ -31,4 +31,32 @@ bool Thread::start()
     }
     return false;
 }
+bool Thread::join()
+{
+    return pthread_join(pid,NULL);
+}
 
+Mutex::Mutex()
+{
+    pthread_mutex_init(&mutex,NULL);
+}
+
+Mutex::~Mutex()
+{
+    pthread_mutex_destroy(&mutex);
+}
+
+int Mutex::lock()
+{
+    return pthread_mutex_lock(&mutex);
+}
+
+int Mutex::unlock()
+{
+    return pthread_mutex_unlock(&mutex);
+}
+
+int Mutex::trylock()
+{
+    return pthread_mutex_trylock(&mutex);
+}
