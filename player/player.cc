@@ -1,5 +1,6 @@
 #include "player.h"
 #include "card/card_array.h"
+#include "card/card.h"
 
 Player::Player()
 {
@@ -7,19 +8,61 @@ Player::Player()
      power_point = 3;
      score_point = 0;
 
-     hand_cards = new Cards;
-     //desk_cards = new Cards;
+     Card *card1 = new Card(1,"card1");
+     Card *card2 = new Card(2,"card2");
+     Card *card3 = new Card(3,"card3");
+     Card *card4 = new Card(4,"card4");
+     Card *card5 = new Card(5,"card5");
+     Card *card6 = new Card(6,"card6");
 
+
+     hand_cards.add(card1);
+     hand_cards.add(card2);
+     hand_cards.add(card3);
+     hand_cards.add(card4);
+     hand_cards.add(card5);
+     hand_cards.add(card6);
 }
 Player::~Player()
 {
-    delete hand_cards;
-    //delete desk_cards;
 }
 
-
+Player *Player::get_instance()
+{
+    static Player instance;
+    return &instance;
+}
 int Player::get_hand_num()
 {
-    int count = hand_cards->size();
-    return count;
+    return hand_cards.size();
 }
+
+bool Player::add_hand_card(Card *card)
+{
+    return hand_cards.add(card);
+}
+
+Card *Player::remove_hand_card(int index)
+{
+    Card *card = hand_cards.get(index);
+    hand_cards.remove(index);
+    return card;
+}
+
+int Player::get_score()
+{
+    return score_point;
+}
+
+int Player::add_score(int point)
+{
+    score_point += point;
+    if(score_point <0)
+    {
+        score_point = 0;
+    }
+
+    return get_score();
+
+}
+

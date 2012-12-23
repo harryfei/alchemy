@@ -4,6 +4,17 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+class CardNode        //卡牌链表
+{
+    public:
+        Card *card;
+
+        CardNode *next;
+        CardNode *pre;
+        CardNode(Card *card);
+        ~CardNode();
+};
 CardNode::CardNode(Card *card)
 {
     this->card = card;
@@ -88,7 +99,6 @@ bool Cards::wash()
 
 }
 
-//增加链表
 bool Cards::add(Card *card)
 {
     CardNode *new_node = new CardNode(card);
@@ -108,15 +118,14 @@ bool Cards::add(Card *card)
     }
 
     total_num++;
+    fix_index();
     return true;
 }
 
 bool Cards::remove(int index)
 {
     CardNode *p = get_node(index);
-    //实际删除
-    p->pre->next = p->next;
-    p->next->pre = p->pre;
+
 
     if(index == (total_num-1))
     {
@@ -124,21 +133,29 @@ bool Cards::remove(int index)
     }
     else if(index == 0)
     {
-         head = p->next;
+        head = p->next;
     }
+    else
+    {
+        p->pre->next = p->next;
+        p->next->pre = p->pre;
+    }
+
+
     delete p;
     p = NULL;
 
     total_num--;
+    fix_index();
     return true;
 
 }
-Card* Cards::get_card(int index)           //由ID号得到元素 待改
+Card* Cards::get(int index)
 {
     return get_node(index)->card;
 }
 
-int  Cards::size()             //得到链表中卡片数
+int  Cards::size()
 {
 
     return total_num;
@@ -156,10 +173,11 @@ bool Cards::insert(Card *card,int index)
     next->pre = new_node;
 
     total_num++;
+    fix_index();
     return true;
 }
-/*---------private mothed ---------------------*/
-CardNode* Cards::get_node(int index)           //由ID号得到元素 待改
+
+CardNode* Cards::get_node(int index)
 {
     CardNode *p;
     p = head;
@@ -168,4 +186,14 @@ CardNode* Cards::get_node(int index)           //由ID号得到元素 待改
         p = p->next;
     }
     return p;
+}
+
+void Cards::fix_index()
+{
+    if(head == NULL || tail == NULL || total_num == 0)
+    {
+        head=NULL;
+        tail=head;
+        total_num =0;
+    }
 }

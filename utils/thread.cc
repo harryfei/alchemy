@@ -1,5 +1,4 @@
 #include "thread.h"
-#include <stdio.h>
 
 Thread::Thread(THREAD_CB func)
 {
@@ -7,24 +6,37 @@ Thread::Thread(THREAD_CB func)
     running = false;
     run = func;
 }
-
+Thread::~Thread()
+{
+    join();
+}
 void Thread::beside_run()
 {
     running = true;
+
     run();
+
     running = false;
 }
 void *Thread::start_thread(void *thread)
 {
     Thread *t = (Thread *)thread;
+    t->join();
+    t->running_mutex.lock();
     t->beside_run();
+    t->running_mutex.unlock();
 }
 bool Thread::is_running()
 {
-    return running;
+    bool status = running;
+    return status;
 }
 bool Thread::start()
 {
+    if(running)
+    {
+        return true;
+    }
     if(pthread_create(&pid,NULL,start_thread,this) != 0)
     {
         return true;
@@ -33,7 +45,11 @@ bool Thread::start()
 }
 bool Thread::join()
 {
-    return pthread_join(pid,NULL);
+    if(pid != 0)
+    {
+        return pthread_join(pid,NULL);
+    }
+    return false;
 }
 
 Mutex::Mutex()

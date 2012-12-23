@@ -1,9 +1,16 @@
-#include <stdio.h>
-
 #include "framework/action.h"
 #include "framework/hashtable/hashtable.h"
 #include "utils/thread.h"
 #include "utils/delegate_tmpl.h"
+#include <stdio.h>
+
+class ActionNode
+{
+    public:
+        Action action;
+        ActionNode *next;
+};
+
 
 ActionExecutor::ActionExecutor()
 {
@@ -27,7 +34,7 @@ bool ActionExecutor::exec_action(Action action)
     if(f != NULL)
     {
         ACTION_CB *function = (ACTION_CB *)f;
-        (*function)();
+        (*function)(action.action_data);
         return true;
     }
     else
@@ -46,6 +53,8 @@ void ActionExecutor::bind(ACTION_CB func,int action_type)
     HT_ADD(action_functions,&action_type,&func);
 }
 
+
+
 ActionDispatcher::ActionDispatcher()
 {
     dispatch_thread = new Thread(member_func(this,&ActionDispatcher::dispatch_loop));
@@ -57,6 +66,7 @@ ActionDispatcher::ActionDispatcher()
 ActionDispatcher::~ActionDispatcher()
 {
     hash_table_delete(action_executors);
+    dispatch_thread->join();
     delete dispatch_thread;
     delete action_queue_mutex;
 }
@@ -70,13 +80,13 @@ void ActionDispatcher::add_executor(ActionExecutor *action_executor)
 {
     int i = executor_count;
     HT_ADD(action_executors,&i,action_executor);
-    executor_count++;
+    ++executor_count;
 }
 
 void ActionDispatcher::remove_executor(ActionExecutor *action_executor)
 {
     HT_REMOVE(action_executors,action_executor);
-    executor_count--;
+    --executor_count;
 }
 
 void ActionDispatcher::send_action(Action action)
@@ -92,8 +102,16 @@ void ActionDispatcher::send_action(Action action)
 }
 void ActionDispatcher::dispatch_loop()
 {
-    while(!action_queue.is_empty())
+    while(true)
     {
+        action_queue_mutex->lock();
+        bool is_empty = action_queue.is_empty();
+        action_queue_mutex->unlock();
+
+        if(is_empty)
+        {
+            break;
+        }
 
         action_queue_mutex->lock();
         Action action = action_queue.pull_action();
@@ -108,8 +126,6 @@ void ActionDispatcher::dispatch_loop()
     }
 }
 
-
-
 ActionQueue::ActionQueue()
 {
     head = NULL;
@@ -119,20 +135,21 @@ ActionQueue::ActionQueue()
 
 Action ActionQueue::pull_action()
 {
+
     Action action = head->action;
     ActionNode *tmp = head;
     head = head->next;
     delete tmp;
-    count--;
+    --count;
     fix_queue();
     return action;
 }
 
 void ActionQueue::push_action(Action action)
 {
-    if (tail == NULL)
+    if (tail == NULL || head == NULL || count == 0)
     {
-        ActionNode * tmp = new ActionNode;
+        ActionNode *tmp = new ActionNode;
         tmp->action = action;
         tmp->next = NULL;
         head = tmp;
@@ -146,12 +163,13 @@ void ActionQueue::push_action(Action action)
         tail->next = tmp;
         tail = tmp;
     }
-    count++;
+    ++count;
     fix_queue();
 }
 
-void ActionQueue::fix_queue(){
-    if (head==NULL || count == 0){
+void ActionQueue::fix_queue()
+{
+    if (head == NULL || tail == NULL ||count == 0){
         head = NULL;
         tail = NULL;
         count = 0;
@@ -160,6 +178,7 @@ void ActionQueue::fix_queue(){
 
 bool ActionQueue::is_empty()
 {
+    fix_queue();
     if (count == 0)
     {
         return true;

@@ -7,14 +7,17 @@ class Action
 {
     public:
         int action_type;
+        int action_data;
 };
 
 
-typedef Func0<void> ACTION_CB;
+typedef Func1<void,int> ACTION_CB;
 class ActionExecutor
 {
     public:
         ActionExecutor();
+        //don't need the virtual ,because we always relase the
+        //object in the subclass
         ~ActionExecutor();
         bool exec_action(Action action);
 
@@ -25,13 +28,7 @@ class ActionExecutor
         hash_table_t *action_functions;
 };
 
-
-class ActionNode
-{
-    public:
-        Action action;
-        ActionNode *next;
-};
+class ActionNode;
 
 class ActionQueue
 {

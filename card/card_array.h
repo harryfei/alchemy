@@ -2,18 +2,8 @@
 #define CARD_ARRAY_H_H_H_
 
 #include "card.h"
-class CardNode        //卡牌链表
-{
-    public:
-        Card *card;
 
-        CardNode *next;
-        CardNode *pre;
-        CardNode(Card *card);
-        ~CardNode();
-};
-
-
+class CardNode;
 /*
  * The card list oprator class
  */
@@ -22,9 +12,10 @@ class Cards
     private :
         CardNode* head;             //the head node
         CardNode* tail;            //the tail node
-        int total_num;                   //链表项数目
+        int total_num;
 
         CardNode* get_node(int index);
+        void fix_index();
     public :
         Cards();
         ~Cards();
@@ -35,7 +26,7 @@ class Cards
         bool clear();
         bool wash();
         int size();
-        Card* get_card(int index);        //由Index得到卡片
+        Card* get(int index);
 
 };
 #endif
