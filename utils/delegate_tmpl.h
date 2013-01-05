@@ -80,7 +80,7 @@ class Func5
         }
 };
 template <typename Ret,typename T>
-Func0<Ret>member_func(T *obj,Ret (T::*function)())
+Func0<Ret>mem_func(T *obj,Ret (T::*function)())
 {
     Func0<Ret> f;
     typedef Ret(NullClass::*NCFunc)(...);
@@ -90,7 +90,7 @@ Func0<Ret>member_func(T *obj,Ret (T::*function)())
 }
 
 template <typename Ret,typename T,typename P1>
-Func1<Ret,P1>member_func(T *obj,Ret (T::*function)(P1))
+Func1<Ret,P1>mem_func(T *obj,Ret (T::*function)(P1))
 {
     Func1<Ret,P1> f;
     typedef Ret(NullClass::*NCFunc)(...);
@@ -100,7 +100,7 @@ Func1<Ret,P1>member_func(T *obj,Ret (T::*function)(P1))
 }
 
 template <typename Ret,typename T,typename P1,typename P2>
-Func2<Ret,P1,P2>member_func(T *obj,Ret (T::*function)(P1,P2))
+Func2<Ret,P1,P2>mem_func(T *obj,Ret (T::*function)(P1,P2))
 {
     Func2<Ret,P1,P2> f;
     typedef Ret(NullClass::*NCFunc)(...);
@@ -110,7 +110,7 @@ Func2<Ret,P1,P2>member_func(T *obj,Ret (T::*function)(P1,P2))
 }
 
 template <typename Ret,typename T,typename P1,typename P2,typename P3>
-Func3<Ret,P1,P2,P3>member_func(T *obj,Ret (T::*function)(P1,P2,P3))
+Func3<Ret,P1,P2,P3>mem_func(T *obj,Ret (T::*function)(P1,P2,P3))
 {
     Func3<Ret,P1,P2,P3> f;
     typedef Ret(NullClass::*NCFunc)(...);
@@ -120,7 +120,7 @@ Func3<Ret,P1,P2,P3>member_func(T *obj,Ret (T::*function)(P1,P2,P3))
 }
 
 template <typename Ret,typename T,typename P1,typename P2,typename P3,typename P4>
-Func4<Ret,P1,P2,P3,P4>member_func(T *obj,Ret (T::*function)(P1,P2,P3,P4))
+Func4<Ret,P1,P2,P3,P4>mem_func(T *obj,Ret (T::*function)(P1,P2,P3,P4))
 {
     Func4<Ret,P1,P2,P3,P4> f;
     typedef Ret(NullClass::*NCFunc)(...);
@@ -130,7 +130,7 @@ Func4<Ret,P1,P2,P3,P4>member_func(T *obj,Ret (T::*function)(P1,P2,P3,P4))
 }
 
 template <typename Ret,typename T,typename P1,typename P2,typename P3,typename P4,typename P5>
-Func5<Ret,P1,P2,P3,P4,P5>member_func(T *obj,Ret (T::*function)(P1,P2,P3,P4,P5))
+Func5<Ret,P1,P2,P3,P4,P5>mem_func(T *obj,Ret (T::*function)(P1,P2,P3,P4,P5))
 {
     Func5<Ret,P1,P2,P3,P4,P5> f;
     typedef Ret(NullClass::*NCFunc)(...);

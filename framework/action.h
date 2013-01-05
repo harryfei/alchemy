@@ -2,11 +2,17 @@
 #define ACTION_H_H_H
 #include "hashtable/hashtable.h"
 #include "utils/thread.h"
+enum ActionType
+{
+    ACTION_DISCARD=1,
+    ACTION_SCORE_ADD,
+    ACTION_WIN
+};
 
 class Action
 {
     public:
-        int action_type;
+        ActionType action_type;
         int action_data;
 };
 
@@ -22,8 +28,8 @@ class ActionExecutor
         bool exec_action(Action action);
 
     protected:
-        void bind(ACTION_CB func,int action_type);
-        void send_action(Action action);
+        void bind(ACTION_CB func,ActionType action_type);
+        void send_action(ActionType action_type, int action_data);
     private:
         hash_table_t *action_functions;
 };

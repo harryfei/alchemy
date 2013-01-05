@@ -28,7 +28,7 @@ ActionExecutor::~ActionExecutor()
 
 bool ActionExecutor::exec_action(Action action)
 {
-    int type = action.action_type;
+    ActionType type = action.action_type;
 
     void *f = HT_LOOKUP(action_functions,&type);
     if(f != NULL)
@@ -43,12 +43,15 @@ bool ActionExecutor::exec_action(Action action)
     }
 }
 
-void ActionExecutor::send_action(Action action)
+void ActionExecutor::send_action(ActionType action_type, int action_data)
 {
+    Action action;
+    action.action_type = action_type;
+    action.action_data = action_data;
     ActionDispatcher::get_instance()->send_action(action);
 }
 
-void ActionExecutor::bind(ACTION_CB func,int action_type)
+void ActionExecutor::bind(ACTION_CB func,ActionType action_type)
 {
     HT_ADD(action_functions,&action_type,&func);
 }
@@ -57,7 +60,7 @@ void ActionExecutor::bind(ACTION_CB func,int action_type)
 
 ActionDispatcher::ActionDispatcher()
 {
-    dispatch_thread = new Thread(member_func(this,&ActionDispatcher::dispatch_loop));
+    dispatch_thread = new Thread(mem_func(this,&ActionDispatcher::dispatch_loop));
     action_queue_mutex = new Mutex();
     action_executors = hash_table_new(MODE_COPY);
     executor_count = 0;

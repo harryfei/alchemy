@@ -80,8 +80,8 @@ PlayerController *Gui::get_player()
 ScreenManager::ScreenManager()
 {
     player = Player::get_instance();
-    bind(member_func(this,&ScreenManager::player_use_card),1);
-    bind(member_func(this,&ScreenManager::player_add_score),2);
+    bind(mem_func(this,&ScreenManager::player_use_card),ACTION_DISCARD);
+    bind(mem_func(this,&ScreenManager::player_add_score),ACTION_SCORE_ADD);
 
 }
 
@@ -91,10 +91,7 @@ ScreenManager::~ScreenManager()
 
 void ScreenManager::click_card()
 {
-    Action action;
-    action.action_type = 1;
-    action.action_data = 0;
-    send_action(action);
+    send_action(ACTION_DISCARD, 0);
 }
 
 void ScreenManager::player_use_card(int index)

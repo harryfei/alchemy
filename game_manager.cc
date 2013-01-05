@@ -6,8 +6,8 @@
 GameManager::GameManager()
 {
     player = Player::get_instance();
-    bind(member_func(this,&GameManager::player_use_card),1);
-    bind(member_func(this,&GameManager::player_add_score),2);
+    bind(mem_func(this,&GameManager::player_use_card),ACTION_DISCARD);
+    bind(mem_func(this,&GameManager::player_add_score),ACTION_SCORE_ADD);
 
 }
 
@@ -19,10 +19,7 @@ void GameManager::player_use_card(int action_data)
 {
     int index = action_data;
     player->remove_hand_card(index);
-    Action action;
-    action.action_type = 2;
-    action.action_data = 3;
-    send_action(action);
+    send_action(ACTION_SCORE_ADD, 3);
 }
 
 void GameManager::player_add_score(int action_data)
