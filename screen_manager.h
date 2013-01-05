@@ -1,9 +1,9 @@
 #ifndef SCREEN_MANAGER_H_H_H_
 #define SCREEN_MANAGER_H_H_H_
 
-#include "framework/action.h"
 #include "player/player.h"
 #include "card/card_array.h"
+#include "utils/sigslot.h"
 #include <gtkmm-3.0/gtkmm/window.h>
 #include <gtkmm-3.0/gtkmm/button.h>
 #include <gtkmm-3.0/gtkmm/box.h>
@@ -36,7 +36,7 @@ class Gui: public Gtk::Window
         Gtk::Box main_box;
         PlayerController player_controller;
 };
-class ScreenManager :public ActionExecutor
+class ScreenManager :public sigslot::has_slots<>
 {
     public:
         ScreenManager();
@@ -46,8 +46,8 @@ class ScreenManager :public ActionExecutor
     private:
         Player *player;
         Gui *desk;
-        void player_use_card(int index);
-        void player_add_score(int score);
+        void player_use_card();
+        void player_add_score();
 };
 
 #endif

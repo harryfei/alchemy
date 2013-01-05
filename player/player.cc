@@ -46,6 +46,7 @@ Card *Player::remove_hand_card(int index)
 {
     Card *card = hand_cards.get(index);
     hand_cards.remove(index);
+    signal_card_out();
     return card;
 }
 
@@ -61,6 +62,8 @@ int Player::add_score(int point)
     {
         score_point = 0;
     }
+
+    signal_score_added();
 
     return get_score();
 

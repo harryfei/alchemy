@@ -27,6 +27,7 @@ PlayerController::PlayerController ()
     box.show();
 }
 
+
 PlayerController::~PlayerController()
 {}
 
@@ -80,8 +81,9 @@ PlayerController *Gui::get_player()
 ScreenManager::ScreenManager()
 {
     player = Player::get_instance();
-    bind(mem_func(this,&ScreenManager::player_use_card),ACTION_DISCARD);
-    bind(mem_func(this,&ScreenManager::player_add_score),ACTION_SCORE_ADD);
+
+    player->signal_card_out.connect(this,&ScreenManager::player_use_card);
+    player->signal_score_added.connect(this,&ScreenManager::player_add_score);
 
 }
 
@@ -91,15 +93,15 @@ ScreenManager::~ScreenManager()
 
 void ScreenManager::click_card()
 {
-    send_action(ACTION_DISCARD, 0);
+    player->remove_hand_card(0);
 }
 
-void ScreenManager::player_use_card(int index)
+void ScreenManager::player_use_card()
 {
     desk->get_player()->show_card_count(player->get_hand_num());
 }
 
-void ScreenManager::player_add_score(int score)
+void ScreenManager::player_add_score()
 {
     desk->get_player()->show_score(player->get_score());
 }

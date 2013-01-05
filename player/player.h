@@ -3,10 +3,14 @@
 
 #include "card/card_array.h"
 #include "card/card.h"
+#include "utils/sigslot.h"
 
 class Player
 {
     public :
+        sigslot::signal0<> signal_card_out;
+        sigslot::signal0<> signal_score_added;
+
         int get_hand_num();
         bool add_hand_card(Card *card);
         Card *remove_hand_card(int index);
