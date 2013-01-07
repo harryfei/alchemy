@@ -12,14 +12,20 @@ add_subdirectory(player)
 add_subdirectory(tests)
 
 find_package(PkgConfig)
+#find_package(lua)
 
 pkg_check_modules(GTKMM gtkmm-3.0)
+pkg_check_modules(LUA lua>=5.2)
+
 
 link_directories(
     ${GTKMM_LIBRARY_DIRS}
+    ${LUA_LIBRARY_DIRS}
 )
 include_directories(
     ${GTKMM_INCLUDE_DIRS}
+    ${LUA_INCLUDE_DIRS}
 )
+
 add_executable("main" main.cc game_manager.cc screen_manager.cc)
-target_link_libraries("main" action player card ${GTKMM_LIBRARIES})
+target_link_libraries("main" action player card ${GTKMM_LIBRARIES} ${LUA_LIBRARIES})
