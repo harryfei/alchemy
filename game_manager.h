@@ -5,6 +5,7 @@
 #include "card/card_array.h"
 #include "utils/sigslot.h"
 #include <lua.hpp>
+#include <string>
 
 class GameManager :public sigslot::has_slots<>
 {
@@ -17,7 +18,7 @@ class GameManager :public sigslot::has_slots<>
         void player_use_card(int index);
         void player_add_score(int score);
         void on_player_score_added();
-        void on_player_card_out();
+        void on_player_card_out(int id, std::string script_name);
 
         int lua_test1();
 

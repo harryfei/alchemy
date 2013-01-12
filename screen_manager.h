@@ -9,6 +9,7 @@
 #include <gtkmm-3.0/gtkmm/box.h>
 #include <gtkmm-3.0/gtkmm/frame.h>
 #include <gtkmm-3.0/gtkmm/label.h>
+#include <string>
 class PlayerController : public Gtk::Frame
 {
     public:
@@ -46,7 +47,7 @@ class ScreenManager :public sigslot::has_slots<>
     private:
         Player *player;
         Gui *desk;
-        void player_use_card();
+        void player_use_card(int id,std::string script_name);
         void player_add_score();
 };
 

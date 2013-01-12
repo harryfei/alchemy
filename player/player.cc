@@ -8,12 +8,12 @@ Player::Player()
      power_point = 3;
      score_point = 0;
 
-     Card *card1 = new Card(1,"card1");
-     Card *card2 = new Card(2,"card2");
-     Card *card3 = new Card(3,"card3");
-     Card *card4 = new Card(4,"card4");
-     Card *card5 = new Card(5,"card5");
-     Card *card6 = new Card(6,"card6");
+     Card *card1 = new Card(1,"card1.lua");
+     Card *card2 = new Card(2,"card2.lua");
+     Card *card3 = new Card(3,"card3.lua");
+     Card *card4 = new Card(4,"card4.lua");
+     Card *card5 = new Card(5,"card5.lua");
+     Card *card6 = new Card(6,"card6.lua");
 
 
      hand_cards.add(card1);
@@ -46,7 +46,7 @@ Card *Player::remove_hand_card(int index)
 {
     Card *card = hand_cards.get(index);
     hand_cards.remove(index);
-    signal_card_out();
+    signal_card_out(card->id, card->script_name);
     return card;
 }
 

@@ -4,11 +4,12 @@
 #include "card/card_array.h"
 #include "card/card.h"
 #include "utils/sigslot.h"
+#include "string"
 
 class Player
 {
     public :
-        sigslot::signal0<> signal_card_out;
+        sigslot::signal2<int,std::string> signal_card_out;
         sigslot::signal0<> signal_score_added;
 
         int get_hand_num();
@@ -24,7 +25,6 @@ class Player
         int health_point;
         int power_point;
         int score_point;
-
 };
 
 #endif
