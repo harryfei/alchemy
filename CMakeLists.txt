@@ -6,6 +6,7 @@ include_directories(
 
 enable_testing()
 add_subdirectory(card)
+add_subdirectory(trigger)
 add_subdirectory(utils)
 add_subdirectory(framework)
 add_subdirectory(player)
@@ -28,4 +29,4 @@ include_directories(
 )
 
 add_executable("main" main.cc game_manager.cc screen_manager.cc)
-target_link_libraries("main" action player card ${GTKMM_LIBRARIES} ${LUA_LIBRARIES})
+target_link_libraries("main" action player card  trigger ${GTKMM_LIBRARIES} ${LUA_LIBRARIES})

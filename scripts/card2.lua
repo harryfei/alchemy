@@ -1,11 +1,13 @@
 id =2
-card2 = {}
-function card2.condition()
-    --add_score(1)
-    lua_log("fff")
-    return  true
+local function condition()
+    print('con2')
+    return true
 end
 
-function card2.action()
+local function action()
     add_score(3)
 end
+
+card2 = {
+    trigger = Trigger.new(condition,action)
+}

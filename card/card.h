@@ -6,7 +6,6 @@ class Card
 {
     public:
         int id;
-        //char *effect_string;
         std::string script_name;
 
         Card(int id,std::string script_name);

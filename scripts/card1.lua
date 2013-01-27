@@ -1,12 +1,14 @@
 --id =1
 
-card1 = {}
-function card1.condition()
-    --add_score(1)
-    print("fdsd")
+local function condition()
+    print('con1')
     return true
 end
 
-function card1.action()
+local function action()
     add_score(1)
 end
+
+card1 = {
+    trigger = Trigger.new(condition,action)
+}

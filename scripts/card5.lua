@@ -1,9 +1,10 @@
 id = 5
-
-function condition()
+local function condition()
     --add_score(1)
     return false
 end
-function action()
+local function action()
     add_score(5)
 end
+card5 = {}
+card5.trigger = Trigger.new(condition,action)

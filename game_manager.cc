@@ -1,10 +1,10 @@
 #include "game_manager.h"
 #include <stdio.h>
-//#include <stdlib.h>
 #include "framework/action.h"
 #include "utils/delegate_tmpl.h"
 #include "player/player.h"
 #include "card/card.h"
+#include "trigger/trigger.h"
 #include <lua.hpp>
 #include <string>
 #include <sstream>
@@ -25,6 +25,26 @@ int GameManager::lua_score_add(lua_State *l)
     return 0;
 }
 
+int GameManager::trigger_new(lua_State *L)
+{
+    int action,condition;
+    //action
+    if lua_isfunction(L, -1)
+    {
+        //ref will pop the object
+        action = luaL_ref(L, LUA_REGISTRYINDEX);
+    }
+    //condition
+    if lua_isfunction(L, -1)
+    {
+        condition = luaL_ref(L, LUA_REGISTRYINDEX);
+    }
+    Trigger *trigger = (Trigger *)lua_newuserdata(L, sizeof(Trigger));
+    trigger->condition = condition;
+    trigger->action = action;
+    return 1;
+}
+
 GameManager::GameManager()
 {
     init_player();
@@ -33,6 +53,7 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+    lua_close(lua_state);
 }
 
 void GameManager::init_player()
@@ -45,10 +66,25 @@ void GameManager::init_player()
 }
 void GameManager::init_lua()
 {
+    static const struct luaL_Reg trigger_lib[] = {
+        {"new",GameManager::trigger_new},
+        {NULL,NULL}
+    };
     lua_state = luaL_newstate();
     luaL_openlibs(lua_state);
     lua_register(lua_state,"lua_log",lua_log);
     lua_register(lua_state,"add_score",lua_score_add);
+
+    register_lib(trigger_lib,"Trigger");
+
+}
+void GameManager::register_lib(const luaL_Reg *lib, const char *lib_name)
+{
+	luaL_newlib(lua_state, lib);
+	lua_pushstring(lua_state, "__index");
+	lua_pushvalue(lua_state, -2);
+	lua_rawset(lua_state, -3);
+	lua_setglobal(lua_state, lib_name);
 
 }
 void GameManager::on_player_score_added()
@@ -63,36 +99,37 @@ std::string GameManager::get_script_path(std::string name)
 }
 
 
-//void GameManager::load_card_script(std::string script_name)
-//{
-   //std::string path = get_script_path(script_name);
+void GameManager::load_card_script(std::string script_name)
+{
+   std::string path = get_script_path(script_name);
+   luaL_dofile(lua_state, path.c_str());
+}
 
-//}
 void GameManager::on_player_card_out(int id,std::string script_name)
 {
-    std::cout << script_name << std::endl;
+    load_card_script(script_name);
 
-    std::string path = get_script_path(script_name);
+    std::stringstream class_buff;
+    class_buff<<"card"<< id;
+    std::string class_name= class_buff.str();
 
-    luaL_dofile(lua_state, path.c_str());
+    lua_getglobal(lua_state, class_name.c_str());
+    lua_getfield(lua_state,-1,"trigger");
 
-    //lua_getglobal(lua_state, "id");
-    //int card_id = luaL_checkint(lua_state,1);
-    //std::stringstream function_name_buff;
-    //function_name_buff <<"card_"<< card_id <<".test";
-    //std::string function_name = function_name_buff.str();
+    Trigger *trigger = (Trigger *)lua_touserdata(lua_state, -1);
 
-    lua_getglobal(lua_state, "card1");
-    lua_getfield(lua_state,-1,"condition");
+    execute_trigger(trigger);
+}
+
+void GameManager::execute_trigger(Trigger *trigger)
+{
+    printf("%d %d\n",trigger->action,trigger->condition);
+    lua_rawgeti(lua_state, LUA_REGISTRYINDEX, trigger->condition);
     lua_pcall(lua_state,0,1,0);
-
     bool condition = lua_toboolean(lua_state,-1);
-    printf("%d\n",condition);
-
     if(condition)
     {
-        lua_getglobal(lua_state, "card1");
-        lua_getfield(lua_state,-1,"action");
+        lua_rawgeti(lua_state, LUA_REGISTRYINDEX, trigger->action);
         lua_pcall(lua_state,0,0,0);
     }
 
