@@ -15,12 +15,12 @@ class GameManager :public sigslot::has_slots<>
     private:
         Player *player;
         lua_State *lua_state;
-        void player_use_card(int index);
-        void player_add_score(int score);
+        void init_lua();
+        void init_player();
         void on_player_score_added();
         void on_player_card_out(int id, std::string script_name);
-
-        int lua_test1();
+        std::string get_script_path(std::string name);
+        void load_script(std::string name);
 
         static int lua_log(lua_State *l);
         static int lua_score_add(lua_State *l);

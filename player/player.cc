@@ -1,27 +1,21 @@
 #include "player.h"
 #include "card/card_array.h"
 #include "card/card.h"
+#include "card/card_manager.h"
 
 Player::Player()
 {
-     health_point = 5;
-     power_point = 3;
-     score_point = 0;
+    health_point = 5;
+    power_point = 3;
+    score_point = 0;
 
-     Card *card1 = new Card(1,"card1.lua");
-     Card *card2 = new Card(2,"card2.lua");
-     Card *card3 = new Card(3,"card3.lua");
-     Card *card4 = new Card(4,"card4.lua");
-     Card *card5 = new Card(5,"card5.lua");
-     Card *card6 = new Card(6,"card6.lua");
+    CardManager *card_manager=CardManager::get_inance();
+    int id = 1;
+    for(id;id<=6;id++)
+    {
+        hand_cards.add(card_manager->fetch_card(id));
+    }
 
-
-     hand_cards.add(card1);
-     hand_cards.add(card2);
-     hand_cards.add(card3);
-     hand_cards.add(card4);
-     hand_cards.add(card5);
-     hand_cards.add(card6);
 }
 Player::~Player()
 {
