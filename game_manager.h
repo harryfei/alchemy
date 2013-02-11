@@ -23,6 +23,7 @@ class GameManager :public sigslot::has_slots<>
         std::string get_script_path(std::string name);
         void load_card_script(std::string name);
         void register_lib(const luaL_Reg *lib,const char *lib_name);
+        void init_object_map();
         void execute_trigger(Trigger *trigger);
 
         static int trigger_new(lua_State *l);

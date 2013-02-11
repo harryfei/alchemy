@@ -39,7 +39,9 @@ int GameManager::trigger_new(lua_State *L)
     {
         condition = luaL_ref(L, LUA_REGISTRYINDEX);
     }
-    Trigger *trigger = (Trigger *)lua_newuserdata(L, sizeof(Trigger));
+    //Trigger *trigger = (Trigger *)lua_newuserdata(L, sizeof(Trigger));
+    Trigger *trigger = new Trigger();
+    trigger->new_lua_object(L);
     trigger->condition = condition;
     trigger->action = action;
     return 1;
@@ -76,6 +78,16 @@ void GameManager::init_lua()
     lua_register(lua_state,"add_score",lua_score_add);
 
     register_lib(trigger_lib,"Trigger");
+
+}
+void GameManager::init_object_map()
+{
+    if (luaL_newmetatable(lua_state, "object_map")) {
+        lua_newtable(lua_state);
+        lua_pushliteral(lua_state, "kv");
+        lua_setfield(lua_state, -2, "__mode");
+        lua_setmetatable(lua_state, -2);
+    }
 
 }
 void GameManager::register_lib(const luaL_Reg *lib, const char *lib_name)
@@ -116,9 +128,9 @@ void GameManager::on_player_card_out(int id,std::string script_name)
     lua_getglobal(lua_state, class_name.c_str());
     lua_getfield(lua_state,-1,"trigger");
 
-    Trigger *trigger = (Trigger *)lua_touserdata(lua_state, -1);
+    //Trigger *trigger = (Trigger *)lua_touserdata(lua_state, -1);
 
-    execute_trigger(trigger);
+    //execute_trigger(trigger);
 }
 
 void GameManager::execute_trigger(Trigger *trigger)

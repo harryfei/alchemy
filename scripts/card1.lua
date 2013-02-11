@@ -9,6 +9,11 @@ local function action()
     add_score(1)
 end
 
+local trigger = Trigger.new(condition,action)
+print(trigger)
+print(trigger.hah)
+trigger.ww = 1
+print(trigger.ww)
 card1 = {
-    trigger = Trigger.new(condition,action)
+    trigger = trigger
 }
