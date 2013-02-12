@@ -33,7 +33,10 @@ int trigger_new(lua_State *L)
     {
         condition = luaL_ref(L, LUA_REGISTRYINDEX);
     }
-    Trigger *trigger = new Trigger();
+    //Trigger *trigger = new Trigger();
+    TriggerManager *trigger_manager = TriggerManager::get_instance();
+    int size = trigger_manager->size();
+    Trigger *trigger = trigger_manager->add(size);
     trigger->new_lua_object(L);
     trigger->condition = condition;
     trigger->action = action;

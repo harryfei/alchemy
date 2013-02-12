@@ -7,7 +7,7 @@
 class CardManager
 {
     public:
-        static CardManager *get_inance();
+        static CardManager *get_instance();
         void clear();
         Card *fetch_card(int id);
         void add_card(int id,std::string script_name);

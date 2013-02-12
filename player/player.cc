@@ -9,7 +9,7 @@ Player::Player()
     power_point = 3;
     score_point = 0;
 
-    CardManager *card_manager=CardManager::get_inance();
+    CardManager *card_manager=CardManager::get_instance();
     int id = 1;
     for(id;id<=6;id++)
     {

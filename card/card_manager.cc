@@ -1,7 +1,7 @@
 #include "card/card_manager.h"
 #include "card/card.h"
 
-CardManager *CardManager::get_inance()
+CardManager *CardManager::get_instance()
 {
     static CardManager instance;
     return  &instance;
