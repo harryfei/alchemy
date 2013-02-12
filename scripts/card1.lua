@@ -1,7 +1,6 @@
 --id =1
 
 local function condition()
-    print('con1')
     return true
 end
 
@@ -10,10 +9,6 @@ local function action()
 end
 
 local trigger = Trigger.new(condition,action)
-print(trigger)
-print(trigger.hah)
-trigger.ww = 1
-print(trigger.ww)
 card1 = {
     trigger = trigger
 }

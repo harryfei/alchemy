@@ -29,5 +29,5 @@ include_directories(
     ${LUA_INCLUDE_DIRS}
 )
 
-add_executable("main" main.cc game_manager.cc screen_manager.cc)
-target_link_libraries("main" action player card  trigger luahelper ${GTKMM_LIBRARIES} ${LUA_LIBRARIES})
+add_executable("main" main.cc game_manager.cc screen_manager.cc game_init.cc api.cc)
+target_link_libraries("main" action player card  trigger luahelper "file" ${GTKMM_LIBRARIES} ${LUA_LIBRARIES})
