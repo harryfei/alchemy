@@ -1,15 +1,21 @@
 Alchemy
 =======
 
-Alchemy is not a real card game but a dynamic card game framework.One of it's goals is to supply a platform for the developer to build their own card game without thinking about non-game-logic development(such as network,mutiple player...)
+Alchemy is not a real card game but a dynamic card game framework. One of it's goals is to supply a platform for the developer to build their own card game without thinking about non-game-logic development(such as network,mutiple player...)
 Currently it is still very small and simple.
 ## Build
 * Build Tool:CMake
 * You need install CMake tool to build the Alchemy
 ```
 $ mkdir build
+```
+```
 $ cd build
+```
+```
 $ cmake ..
+```
+```
 $ make
 ```
 ## Constructure
