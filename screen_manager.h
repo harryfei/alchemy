@@ -47,7 +47,7 @@ class ScreenManager :public sigslot::has_slots<>
     private:
         Player *player;
         Gui *desk;
-        void player_use_card(int id,std::string script_name);
+        void player_use_card(int id);
         void player_add_score();
 };
 

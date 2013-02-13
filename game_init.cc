@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
-#include "card/card_manager.h"
+#include "card/card.h"
 #include "utils/file.h"
 
 void load_lua_scripts(lua_State *L)
@@ -19,6 +19,7 @@ void load_lua_scripts(lua_State *L)
         int id = atoi(&(*name)[4]);
         std::cout<<"Init:add card "<<id<<std::endl;
         luaL_dofile(L, ("scripts/"+*name).c_str());
-        card_manager->add_card(id,*name);
+        Card *card = card_manager->add(id);
+        card->id = id;
     }
 }

@@ -43,7 +43,7 @@ void GameManager::on_player_score_added()
 {
 }
 
-void GameManager::on_player_card_out(int id,std::string script_name)
+void GameManager::on_player_card_out(int id)
 {
 
     std::stringstream class_buff;

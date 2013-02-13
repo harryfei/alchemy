@@ -97,7 +97,7 @@ void ScreenManager::click_card()
     player->remove_hand_card(0);
 }
 
-void ScreenManager::player_use_card(int id,std::string script_name)
+void ScreenManager::player_use_card(int id)
 {
     desk->get_player()->show_card_count(player->get_hand_num());
 }

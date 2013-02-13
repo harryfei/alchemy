@@ -19,7 +19,7 @@ class GameManager :public sigslot::has_slots<>
         void init_lua();
         void init_player();
         void on_player_score_added();
-        void on_player_card_out(int id, std::string script_name);
+        void on_player_card_out(int id);
         void execute_trigger(Trigger *trigger);
 
         static int trigger_new(lua_State *l);

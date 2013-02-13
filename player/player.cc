@@ -1,7 +1,6 @@
 #include "player.h"
 #include "card/card_array.h"
 #include "card/card.h"
-#include "card/card_manager.h"
 
 Player::Player()
 {
@@ -13,7 +12,7 @@ Player::Player()
     int id = 1;
     for(id;id<=6;id++)
     {
-        hand_cards.add(card_manager->fetch_card(id));
+        hand_cards.add(card_manager->fetch(id));
     }
 
 }
@@ -40,7 +39,7 @@ Card *Player::remove_hand_card(int index)
 {
     Card *card = hand_cards.get(index);
     hand_cards.remove(index);
-    signal_card_out(card->id, card->script_name);
+    signal_card_out(card->id);
     return card;
 }
 

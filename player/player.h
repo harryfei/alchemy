@@ -9,7 +9,7 @@
 class Player
 {
     public :
-        sigslot::signal2<int,std::string> signal_card_out;
+        sigslot::signal1<int> signal_card_out;
         sigslot::signal0<> signal_score_added;
 
         int get_hand_num();
