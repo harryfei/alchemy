@@ -8,19 +8,14 @@ Currently it is still very small and simple.
 ## Build
 * Build Tool:CMake
 * You need install CMake tool to build the Alchemy
+
 ```
 $ mkdir build
-```
 
-```
 $ cd build
-```
 
-```
 $ cmake ..
-```
 
-```
 $ make
 ```
 
