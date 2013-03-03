@@ -43,7 +43,7 @@ LuaBase::~LuaBase()
 int LuaBase::new_lua_object(lua_State *L)
 {
     lua_newtable(L);
-    lua_pushinteger(L,(int)this);
+    lua_pushinteger(L,reinterpret_cast<long>(this));
     lua_setfield(L,-2,"__id");
 
     luaL_newmetatable(L,"Lua_Base_Meta");
