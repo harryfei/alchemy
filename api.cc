@@ -15,7 +15,9 @@ int lua_log(lua_State *l)
 int lua_score_add(lua_State *l)
 {
     int score = luaL_checkint(l,1);
-    Player::get_instance()->add_score(score);
+    //Player::get_instance()->add_score(score);
+    auto player_manager = PlayerManager::get_instance();
+    player_manager->fetch(1)->add_score(score);
     return 0;
 }
 

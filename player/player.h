@@ -4,28 +4,31 @@
 #include "card/card_array.h"
 #include "card/card.h"
 #include "utils/sigslot.h"
+#include "action_def.h"
 #include "string"
 
 class Player
 {
     public :
-        sigslot::signal1<int> signal_card_out;
-        sigslot::signal0<> signal_score_added;
+        CardOut::Signal signal_card_out;
+        CardOut::Signal signal_score_added;
+        Win::Signal signal_win;
 
         int get_hand_num();
         bool add_hand_card(Card *card);
         Card *remove_hand_card(int index);
         int get_score();
         int add_score(int point);
-        static Player *get_instance();
         void init_hand();
-    private:
+        void win();
         Player();
         ~Player();
+    private:
         Cards hand_cards;
         int health_point;
         int power_point;
         int score_point;
 };
+typedef Manager<Player> PlayerManager;
 
 #endif

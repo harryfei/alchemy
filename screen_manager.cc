@@ -4,11 +4,11 @@
 #include <gtkmm-3.0/gtkmm/box.h>
 #include <gtkmm-3.0/gtkmm/label.h>
 #include <gtkmm-3.0/gtkmm/frame.h>
-#include "framework/action.h"
 #include "utils/delegate_tmpl.h"
 #include "player/player.h"
 #include <glibmm/ustring.h>
 #include <string>
+#include <iostream>
 
 
 PlayerController::PlayerController ()
@@ -86,10 +86,18 @@ PlayerController *Gui::get_other()
 
 ScreenManager::ScreenManager()
 {
-    player = Player::get_instance();
+
+    auto player_manager = PlayerManager::get_instance();
+    player = player_manager->fetch(1);
+    other = player_manager->fetch(2);
 
     player->signal_card_out.connect(this,&ScreenManager::player_use_card);
     player->signal_score_added.connect(this,&ScreenManager::player_add_score);
+    player->signal_win.connect(this,&ScreenManager::player_win);
+
+    other->signal_card_out.connect(this,&ScreenManager::other_use_card);
+    other->signal_score_added.connect(this,&ScreenManager::other_add_score);
+    other->signal_win.connect(this,&ScreenManager::other_win);
 
 }
 
@@ -107,9 +115,27 @@ void ScreenManager::player_use_card(int id)
     desk->get_player()->show_card_count(player->get_hand_num());
 }
 
-void ScreenManager::player_add_score()
+void ScreenManager::player_add_score(int score)
 {
     desk->get_player()->show_score(player->get_score());
+}
+void ScreenManager::player_win()
+{
+    std::cout << "player1 win"<< std::endl;
+
+}
+void ScreenManager::other_use_card(int id)
+{
+    desk->get_other()->show_card_count(other->get_hand_num());
+}
+
+void ScreenManager::other_add_score(int score)
+{
+    desk->get_other()->show_score(other->get_score());
+}
+void ScreenManager::other_win()
+{
+    std::cout << "player2 win"<< std::endl;
 }
 
 int ScreenManager::loop(int argc,char *argv[])
@@ -122,6 +148,8 @@ int ScreenManager::loop(int argc,char *argv[])
     desk = new Gui();
     desk->get_player()->get_discard()->signal_clicked().connect(sigc::mem_fun(*this, &ScreenManager::click_card));
     desk->get_player()->show_card_count(player->get_hand_num());
+
+    desk->get_other()->show_card_count(other->get_hand_num());
 
     int result = app->run(*desk);
     delete desk;

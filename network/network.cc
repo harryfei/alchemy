@@ -64,6 +64,15 @@ void Network::stop() {
 void Network::set_handler(NetworkHandler *handler) {
     this->handler = handler;
 }
+
+void Network::send_data(void *data,int length) {
+    ENetPacket *packet = enet_packet_create(
+            data,
+            length,
+            ENET_PACKET_FLAG_RELIABLE);
+    enet_host_broadcast(host,0,packet);
+}
+
 NetServer::NetServer() {
 }
 
@@ -85,13 +94,6 @@ void NetServer::start_server(const std::string &hostname,int port) {
     }
 }
 
-void NetServer::send_data(const std::string &data) {
-    ENetPacket *packet = enet_packet_create(
-            data.c_str(),
-            data.length()+1,
-            ENET_PACKET_FLAG_RELIABLE);
-    enet_host_broadcast(host,0,packet);
-}
 
 NetClient::NetClient() {
 }
@@ -131,13 +133,5 @@ void NetClient::connect(const std::string &hostname,int port) {
                 <<std::endl;
         return;
     }
-}
-
-void NetClient::send_data(const std::string &data) {
-    ENetPacket *packet = enet_packet_create(
-            data.c_str(),
-            data.length()+1,
-            ENET_PACKET_FLAG_RELIABLE);
-    enet_host_broadcast(host,0,packet);
 }
 

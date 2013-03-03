@@ -49,9 +49,15 @@ class ScreenManager :public sigslot::has_slots<>
         int loop(int argc, char *argv[]);
     private:
         Player *player;
+        Player *other;
         Gui *desk;
         void player_use_card(int id);
-        void player_add_score();
+        void player_add_score(int score);
+        void player_win();
+
+        void other_use_card(int id);
+        void other_add_score(int score);
+        void other_win();
 };
 
 #endif

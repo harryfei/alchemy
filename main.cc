@@ -2,6 +2,11 @@
 #include "screen_manager.h"
 #include "network_manager.h"
 
+void init(){
+    auto player_manager = PlayerManager::get_instance();
+    auto player = player_manager->add(1);
+    auto other = player_manager->add(2);
+}
 int main(int argc, char *argv[])
 {
     bool is_server = false;
@@ -10,6 +15,7 @@ int main(int argc, char *argv[])
     }
     //The order must be network > screen > game.
     //this is because the signal slot execute order.
+    init();
     NetworkManager network_manager;
     network_manager.init(is_server);
     ScreenManager screen_manager;

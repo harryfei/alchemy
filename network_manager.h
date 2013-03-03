@@ -3,6 +3,7 @@
 
 #include "utils/sigslot.h"
 #include "network/network.h"
+#include "action_def.h"
 class NetworkManager :
             public sigslot::has_slots<>,
             public NetworkHandler{
@@ -23,9 +24,11 @@ class NetworkManager :
         void disconnect(ENetPeer *peer,
                 const unsigned char channel,
                 ENetPacket *packet);
+        void process_net_data(Action::NetPacket *packet);
 
-        void on_player_score_added();
+        void on_player_score_added(int score);
         void on_player_card_out(int id);
+        //void on_player_win();
 
 };
 

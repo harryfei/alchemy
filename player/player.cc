@@ -1,6 +1,7 @@
 #include "player.h"
 #include "card/card_array.h"
 #include "card/card.h"
+#include <iostream>
 
 Player::Player()
 {
@@ -23,11 +24,6 @@ void Player::init_hand(){
     }
 }
 
-Player *Player::get_instance()
-{
-    static Player instance;
-    return &instance;
-}
 int Player::get_hand_num()
 {
     return hand_cards.size();
@@ -59,9 +55,13 @@ int Player::add_score(int point)
         score_point = 0;
     }
 
-    signal_score_added();
-
+    signal_score_added(point);
+    if(score_point > 10){
+        win();
+    }
     return get_score();
-
+}
+void Player::win(){
+    signal_win();
 }
 

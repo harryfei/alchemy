@@ -1,7 +1,6 @@
 #include "game_manager.h"
 
 #include "game_init.h"
-#include "framework/action.h"
 #include "utils/delegate_tmpl.h"
 #include "player/player.h"
 #include "card/card.h"
@@ -27,8 +26,12 @@ GameManager::~GameManager()
 
 void GameManager::init_player()
 {
-    player = Player::get_instance();
+    auto player_manager = PlayerManager::get_instance();
+    player = player_manager->fetch(1);
     player->init_hand();
+
+    auto other = player_manager->fetch(2);
+    other ->init_hand();
 
     player->signal_card_out.connect(this,&GameManager::on_player_card_out);
     player->signal_score_added.connect(this,&GameManager::on_player_score_added);
@@ -40,7 +43,7 @@ void GameManager::init_lua()
     register_api(lua_state);
 
 }
-void GameManager::on_player_score_added()
+void GameManager::on_player_score_added(int score)
 {
 }
 

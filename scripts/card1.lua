@@ -6,6 +6,7 @@ end
 
 local function action()
     add_score(1)
+    print('dsf')
 end
 
 local trigger = Trigger.new(condition,action)

@@ -23,16 +23,20 @@ class NetworkHandler{
                 ENetPacket *packet)=0;
 };
 
+class NetPacket {
+    public:
+        int type;
+};
+
 class Network {
     public:
         Network();
         virtual ~Network();
         void stop();
         void set_handler(NetworkHandler *handler);
-        //void send_data();
         void start_loop();
         void wait();
-        virtual void send_data(const std::string &data)=0;
+        void send_data(void *data,int length);
     protected:
         NetworkHandler *handler;
         ENetHost *host;
@@ -48,7 +52,6 @@ class NetServer:public Network{
         NetServer(NetworkHandler *handler);
         ~NetServer();
         void start_server(const std::string &hostname,int port);
-        void send_data(const std::string &data);
     private:
         ENetAddress address;
 };
@@ -60,7 +63,6 @@ class NetClient:public Network{
         ~NetClient();
         void start_client();
         void connect(const std::string &hostname,int port);
-        void send_data(const std::string &data);
     private:
         ENetPeer *peer;
 };
