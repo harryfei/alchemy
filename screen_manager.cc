@@ -54,29 +54,34 @@ Gtk::Button *PlayerController::get_discard()
 {
     return &discard;
 }
+
 Gui::Gui()
 {
     set_title("Alchemy");
     set_border_width(10);
     player_controller.set_label("player1");
+    other_controller.set_label("player2");
 
     main_box.pack_start(player_controller);
+    main_box.pack_start(other_controller);
     player_controller.show();
+    other_controller.show();
 
     add(main_box);
-
     main_box.show();
 }
-
-
 
 Gui::~Gui()
 {}
 
-
 PlayerController *Gui::get_player()
 {
     return &player_controller;
+}
+
+PlayerController *Gui::get_other()
+{
+    return &other_controller;
 }
 
 ScreenManager::ScreenManager()
@@ -111,11 +116,13 @@ int ScreenManager::loop(int argc,char *argv[])
 {
 
     Glib::RefPtr<Gtk::Application> app =
-        Gtk::Application::create(argc, argv,
-                "org.gtkmm.examples.base");
+    //auto app =
+        Gtk::Application::create(argc, argv
+                );
     desk = new Gui();
     desk->get_player()->get_discard()->signal_clicked().connect(sigc::mem_fun(*this, &ScreenManager::click_card));
     desk->get_player()->show_card_count(player->get_hand_num());
+
     int result = app->run(*desk);
     delete desk;
     return result;

@@ -28,6 +28,7 @@ GameManager::~GameManager()
 void GameManager::init_player()
 {
     player = Player::get_instance();
+    player->init_hand();
 
     player->signal_card_out.connect(this,&GameManager::on_player_card_out);
     player->signal_score_added.connect(this,&GameManager::on_player_score_added);

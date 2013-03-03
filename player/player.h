@@ -18,6 +18,7 @@ class Player
         int get_score();
         int add_score(int point);
         static Player *get_instance();
+        void init_hand();
     private:
         Player();
         ~Player();

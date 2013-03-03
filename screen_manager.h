@@ -10,6 +10,7 @@
 #include <gtkmm-3.0/gtkmm/frame.h>
 #include <gtkmm-3.0/gtkmm/label.h>
 #include <string>
+
 class PlayerController : public Gtk::Frame
 {
     public:
@@ -31,11 +32,13 @@ class Gui: public Gtk::Window
         Gui();
         virtual ~Gui();
         PlayerController *get_player();
+        PlayerController *get_other();
 
     protected:
         //Member widgets:
         Gtk::Box main_box;
         PlayerController player_controller;
+        PlayerController other_controller;
 };
 class ScreenManager :public sigslot::has_slots<>
 {

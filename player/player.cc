@@ -8,16 +8,19 @@ Player::Player()
     power_point = 3;
     score_point = 0;
 
+
+}
+Player::~Player()
+{
+}
+
+void Player::init_hand(){
     CardManager *card_manager=CardManager::get_instance();
     int id = 1;
     for(id;id<=6;id++)
     {
         hand_cards.add(card_manager->fetch(id));
     }
-
-}
-Player::~Player()
-{
 }
 
 Player *Player::get_instance()
